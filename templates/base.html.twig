@@ -22,11 +22,9 @@
                 <div class="" id="navbarNav">
                     <ul class="navbar-nav">
                         {% if app.user %}
-                            {% if path(app.request.attributes.get('_route')) != path("question_create") %}
                                 <li class="nav-item active">
                                     <a class="btn btn-outline-secondary" href="{{ path("question_create") }}">Ask a Question</a>
                                 </li>
-                            {% endif %}
                         {% endif %}
                         <li class="nav-item active">
                             {% if app.user %}

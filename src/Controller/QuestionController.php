@@ -48,4 +48,15 @@ class QuestionController extends AbstractController
             "form" => $form->createView()
         ]);
     }
+
+    /**
+     * @Route("/question/{id}", name="view_question")
+     * @param Questions
+     */
+    public function viewQuestion(Questions $question): Response{
+        dump($question);
+        return $this->render("question/view.html.twig",[
+            "question" => $question
+        ]);
+    }
 }
