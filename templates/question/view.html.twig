@@ -13,12 +13,18 @@
                 <p>👍🏻 {{ question.likes }}</p>
             {% endif %}
         </div>
-        <div>
+        <div style="margin-top: 20px">
             <h3>Answers: </h3>
             {% if question.answers == null %}
                 <p>No Answers yet</p>
             {% endif %}
-            
+            {% for answer in question.answers.snapshot %}
+                <div style="padding: 5px; border-top: 1px solid lightgrey; border-bottom: 1px solid lightgrey">
+                    <h5>{{ answer.answer }}</h5>
+
+                    <p class="text-muted">{{ answer.user.name }}</p>
+                </div>
+            {% endfor %}
         </div>
 
     </div>
