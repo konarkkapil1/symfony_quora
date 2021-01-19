@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Questions;
 use App\Form\QuestionFormType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -58,5 +59,18 @@ class QuestionController extends AbstractController
         return $this->render("question/view.html.twig",[
             "question" => $question
         ]);
+    }
+
+    /**
+     * @Route("/question/like/{id}", name="like_question")
+     */
+    public function likeQuestion(Questions $question,$id): Response{
+        $em = $this->getDoctrine()->getManager();
+        $question->setLikes($question->getLikes() + 1);
+        $em->persist($question);
+        $em->flush();
+
+        return new JsonResponse(["likes" => $question->getLikes()]);
+
     }
 }
