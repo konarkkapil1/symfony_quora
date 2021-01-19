@@ -17,12 +17,23 @@
         <div style="border: 1px solid lightgrey; border-radius: 8px;padding: 10px">
             <h1><span class="text-muted" style="font-size: 1.5rem">#{{ question.id }} </span>{{ question.question }}</h1>
             <p class="text-muted">Asked by: {{ question.user.name }}</p>
-            <p style="font-size: 1rem" onclick="like({{ question.id }})" class="like-question" ><a >👍Likes</a> <span class="question-likes-count">{{ question.likes == null ? "No likes yet" : question.likes }}</span></p>
+                {% if app.user %}
+                    <p style="font-size: 1rem" onclick="like({{ question.id }})" class="like-question" ><a >👍Likes</a> <span class="question-likes-count">{{ question.likes == null ? "No likes yet" : question.likes }}</span></p>
+                {% endif %}
+                {% if app.user == null %}
+                    <p style="font-size: 1rem" ><a >👍Likes</a> <span class="question-likes-count">{{ question.likes == null ? "No likes yet" : question.likes }}</span></p>
+                {% endif %}
+
         </div>
+        {% if app.user %}
+            {{ form(form) }}
+        {% endif %}
+
+
         <div style="margin-top: 20px">
-            <h3>Answers: </h3>
+            <h3>Answers: ({{ question.answers.snapshot|length }})</h3>
                 {% for answer in question.answers.snapshot %}
-                    <div style="padding: 5px; border-top: 1px solid lightgrey; border-bottom: 1px solid lightgrey">
+                    <div style="padding: 5px; border-top: 1px solid lightgrey; border-bottom: 1px solid lightgrey; margin-bottom: 10px">
                         <p><span class="text-muted" style="font-size: 1rem">#{{ answer.id }}</span> {{ answer.answer }}</p>
 
                         <span class="text-muted" style="font-size: 1rem">Answered by: {{ answer.user.name }}</span>

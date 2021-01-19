@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\Answers;
 use App\Entity\Questions;
+use App\Form\AnswerType;
 use App\Form\QuestionFormType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -54,10 +56,27 @@ class QuestionController extends AbstractController
      * @Route("/question/{id}", name="view_question")
      * @param Questions
      */
-    public function viewQuestion(Questions $question): Response{
-        dump($question);
+    public function viewQuestion(Questions $question, Request $request): Response{
+        $answer = new Answers();
+        $form = $this->createForm(AnswerType::class, $answer);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted()){
+
+            $answer->setQuestion($question);
+            $answer->setUser($this->getUser());
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($answer);
+            $em->flush();
+            return $this->render("question/view.html.twig",[
+                "question" => $question,
+                "form" => $form->createView()
+            ]);
+        }
+
         return $this->render("question/view.html.twig",[
-            "question" => $question
+            "question" => $question,
+            "form" => $form->createView()
         ]);
     }
 
